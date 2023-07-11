@@ -7,7 +7,7 @@ file_list = os.listdir(folder_path)
 
 #open files that end with ".txt"
 for file_name in file_list:
-    if not file_name.endswith(".txt"):
+    if ( (not file_name.startswith("Ising_")) or (not file_name.endswith(".txt"))):
         continue
     x_values = []
     y_means = []
@@ -33,8 +33,14 @@ for file_name in file_list:
     def fit_function(x, a, b, c):
         x = np.asarray(x)
         return a*(((x-b)/c)**(1/8)) # m~[(Tc-T)/Tc]^{1/8}
-    fit_const, _ = curve_fit(fit_function, x_values, y_means, p0=[-0.5, 1, -2, 1])
-    x_fit_values = np.linspace(0.6, 3, 200)
+    x_fit_data = []
+    for i in x_values:
+        if (i > 2.3):
+            continue
+        x_fit_data.append(i)
+    y_fit_data = y_means[len(y_means) - len(x_fit_data):]
+    fit_const, _ = curve_fit(fit_function, x_fit_data, y_fit_data, p0=[1, 2, 2])
+    x_fit_values = np.linspace(0.6, 2.3, 200)
 
 #plot graph
     h = plt.errorbar(x_values, y_means, yerr=y_stddevs, ecolor='red' , elinewidth=1)
