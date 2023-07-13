@@ -5,10 +5,10 @@
 #include <functional>
 #include <fstream>
 #include <string>
-#include <vector>
 #include <algorithm>
 using namespace std;
 
+//Sum of element of array
 int Sum(int* arr, int size){
     int result = 0;
     for(int i = 0 ; i < size ; i ++){
@@ -17,9 +17,10 @@ int Sum(int* arr, int size){
     return result;
 }
 
-int Index_position(int* arr, int num, int size){
+//find the random valid position by random input.
+int Index_position(int* arr, int random_input_num, int size){
     int result = 0;
-    int count = num;
+    int count = random_input_num;
     for (int i = 0; i < size; i++){
         if(arr[i]){
             result = i;
@@ -31,8 +32,6 @@ int Index_position(int* arr, int num, int size){
     }
     return result;
 }
-
-
 
 int main( int argc, char** argv ){
     //input factors
@@ -103,37 +102,68 @@ int main( int argc, char** argv ){
         //apply to mean m
         string line = to_string(T);
         float p = 1.0 - exp(-2.0/T);
-            for(int ___ = 0 ; ___ < 10 ; ___++){
+        for(int ___ = 0 ; ___ < 10 ; ___++){
             long double m_sum = .0;
             for (long long int _ = 0 ; _ < apply_count / 10 ; _++){
+//algorithm start///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                /*                
+                j ← nran (1, N)
+                C←{j}
+                P←{j}
+                */
                 float prob = generator2();
-                int position = prob ;
+                int j = prob ;
                 int Pocket[N]; fill_n(Pocket, N, 0);
                 int Cluster[N]; fill_n(Pocket, N, 0);
-                Pocket[position] = 1; Cluster[position] = 1;
+                Pocket[j] = 1; Cluster[j] = 1;
 
-                while (!Sum(Pocket, N)){
+                /*
+                while (P = ∅) do
+                */
+                while (Sum(Pocket, N)){
+
+                /*
+                k ← any element of P
+                */
                     mt19937 engine3((unsigned int)time(NULL));
                     uniform_int_distribution<int> distribution3(0, Sum(Pocket, N));
                     auto generator3 = bind(distribution2, engine2);
-                    int j = Index_position(Pocket, generator3(), N);
-                    int up = sqrtN*((j/sqrtN - 1) % sqrtN) + (j % sqrtN);
-                    int down = sqrtN*((j/sqrtN + 1) % sqrtN) + (j % sqrtN);
-                    int left = sqrtN*(j/sqrtN) + ((j % sqrtN - 1) % sqrtN);
-                    int right = sqrtN*(j/sqrtN) + ((j % sqrtN + 1) % sqrtN);
-                    for (int l : {up, down, left, right} ){
-                        if ((SpinMatrix[l] == SpinMatrix[j])&&(!Cluster[l])&&(prob - position < p)){
-                            Pocket[l] = 1;
-                            Cluster[l] = 1;
+                    int k = Index_position(Pocket, generator3(), N);
+
+                /*
+                for (∀ l ∈ C with l neighbor of k, σl = σk) do
+                    if (ran (0, 1) < p) then
+                */
+                    for (int l : {sqrtN*((k/sqrtN - 1) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
+                                  sqrtN*(k/sqrtN) + ((k % sqrtN - 1) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){
+                        float prob2 = generator2(); int prob2_int = prob2;
+                        if ((SpinMatrix[l] == SpinMatrix[k])&&(!Cluster[l])&&(prob2-prob2_int < p)){
+
+                /*
+                P←P∪{l}
+                C←C∪{l}
+                */
+                            Pocket[l] = 1; Cluster[l] = 1;
                         }
                     }
-                    Pocket[j] = 0;
+
+                /*
+                P←P\{k}
+                */
+                    Pocket[k] = 0;
                 }
+
+                /*
+                for ∀k ∈ C do
+                  { σk ← −σk
+                */
                 for (int i = 0 ; i < N ; i ++){
                     if (Cluster[i]){
                         SpinMatrix[i] *= -1;
                     }
                 }
+
+//algorithm end////////////////////////////////////////////////////////////////////////////////////////////////////
                 float S_sum = 0;
                 for (int i = 0; i < N ; i ++){
                     S_sum += SpinMatrix[i];
