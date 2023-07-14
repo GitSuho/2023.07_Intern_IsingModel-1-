@@ -105,65 +105,30 @@ int main( int argc, char** argv ){
         for(int ___ = 0 ; ___ < 10 ; ___++){
             long double m_sum = .0;
             for (long long int _ = 0 ; _ < apply_count / 10 ; _++){
-//algorithm start///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                /*                
-                j ← nran (1, N)
-                C←{j}
-                P←{j}
-                */
                 float prob = generator2();
                 int j = prob ;
                 int Pocket[N]; fill_n(Pocket, N, 0);
-                int Cluster[N]; fill_n(Pocket, N, 0);
+                int Cluster[N]; fill_n(Cluster, N, 0);
                 Pocket[j] = 1; Cluster[j] = 1;
-
-                /*
-                while (P = ∅) do
-                */
                 while (Sum(Pocket, N)){
-
-                /*
-                k ← any element of P
-                */
                     mt19937 engine3((unsigned int)time(NULL));
                     uniform_int_distribution<int> distribution3(0, Sum(Pocket, N));
-                    auto generator3 = bind(distribution2, engine2);
+                    auto generator3 = bind(distribution3, engine3);
                     int k = Index_position(Pocket, generator3(), N);
-
-                /*
-                for (∀ l ∈ C with l neighbor of k, σl = σk) do
-                    if (ran (0, 1) < p) then
-                */
                     for (int l : {sqrtN*((k/sqrtN - 1) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
                                   sqrtN*(k/sqrtN) + ((k % sqrtN - 1) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){
                         float prob2 = generator2(); int prob2_int = prob2;
                         if ((SpinMatrix[l] == SpinMatrix[k])&&(!Cluster[l])&&(prob2-prob2_int < p)){
-
-                /*
-                P←P∪{l}
-                C←C∪{l}
-                */
                             Pocket[l] = 1; Cluster[l] = 1;
                         }
                     }
-
-                /*
-                P←P\{k}
-                */
                     Pocket[k] = 0;
                 }
-
-                /*
-                for ∀k ∈ C do
-                  { σk ← −σk
-                */
                 for (int i = 0 ; i < N ; i ++){
                     if (Cluster[i]){
                         SpinMatrix[i] *= -1;
                     }
                 }
-
-//algorithm end////////////////////////////////////////////////////////////////////////////////////////////////////
                 float S_sum = 0;
                 for (int i = 0; i < N ; i ++){
                     S_sum += SpinMatrix[i];
