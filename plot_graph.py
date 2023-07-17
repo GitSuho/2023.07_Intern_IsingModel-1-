@@ -9,6 +9,7 @@ file_list = os.listdir(folder_path)
 for file_name in file_list:
     if ( (not file_name.startswith("Ising_")) or (not file_name.endswith(".txt"))):
         continue
+    last_real_filename = file_name
     x_values = []
     y_means = []
     y_abs = []
@@ -43,13 +44,17 @@ for file_name in file_list:
 #     x_fit_values = np.linspace(x_fit_data[-1], x_fit_data[0], 200)
 
 #plot graph
-    h = plt.errorbar(x_values, y_means, yerr=y_stddevs, ecolor='red' , elinewidth=1)
+    h = plt.errorbar(x_values, y_means, yerr=y_stddevs, ecolor='red' , elinewidth=1, label = file_name[6:].split("_")[0])
     h.get_children()[1].set_linestyle('--')
     # plt.plot(x_values, y_abs, color = 'green')
     # plt.plot(x_fit_values, fit_function(x_fit_values, *fit_const), color = 'orange')
     plt.xlabel('T')
     plt.ylabel('<m>')
     plt.suptitle('IsingModel_graph', fontsize = 15)
-    plt.title(file_name[6:-4] , fontsize = 10)
-    # plt.savefig(f'{file_name[:-4]}.jpg', dpi=3000)
-    plt.show()
+    plt.title(file_name[10:-4] , fontsize = 10)#[6:-4]
+    
+    plt.legend(loc = 'lower left')
+    
+    
+plt.savefig(f'{last_real_filename[:-4]}.jpg', dpi=3000)
+plt.show()
