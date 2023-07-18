@@ -52,7 +52,7 @@ for file_name in file_list:
     plt.ylabel('<m>')
     plt.suptitle('IsingModel_graph', fontsize = 15)
     plt.title(file_name[10:-4] , fontsize = 10)#[6:-4]
-    
+    plt.ylim(0, 1.1)
     plt.legend(loc = 'lower left')
     
     
