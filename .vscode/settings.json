@@ -1,9 +1,8 @@
 {
     "files.associations": {
-        "string": "cpp",
-        "xutility": "cpp",
-        "random": "cpp",
-        "vector": "cpp",
-        "functional": "cpp"
+        "cmath": "cpp",
+        "iostream": "cpp",
+        "xstring": "cpp",
+        "string": "cpp"
     }
 }
