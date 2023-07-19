@@ -28,7 +28,7 @@ beta = 1
 N_lattice = 32**2
 y_value = []
 for i in range(len(_SS)):
-    y_value.append(beta/N_lattice*(_SS[i] - 4*_S[i]*_S[i]))
+    y_value.append(beta/N_lattice*(_SS[i] - _S[i]*_S[i]))
 
 plt.xlabel("T")
 plt.ylabel('MagneticSuceptability')

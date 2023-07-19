@@ -59,8 +59,8 @@ int main( int argc, char** argv ){
     fill_n(SpinMatrix, N, 1);
 
     //write file generate
-    string filename = "Ising_MSLF_"+to_string(sqrtN)+"x"+to_string(sqrtN)+"_MCeff"+to_string(eff_mc_step)+"_intv"+to_string(T_interval).substr(0, 5)+addition_name+".txt"; 
-    ofstream writefile(filename);
+    // string filename = "Ising_MSLF_"+to_string(sqrtN)+"x"+to_string(sqrtN)+"_MCeff"+to_string(eff_mc_step)+"_intv"+to_string(T_interval).substr(0, 5)+addition_name+".txt"; 
+    // ofstream writefile(filename);
     string filename2 = "IsingFract_wrfile_"+to_string(sqrtN)+"x"+to_string(sqrtN)+"_MCeff"+to_string(eff_mc_step)+"_intv"+to_string(T_interval).substr(0, 5)+addition_name+".txt";
     ofstream IsingFract_wrfile(filename2);
 
@@ -80,7 +80,7 @@ int main( int argc, char** argv ){
     long double S_mul = 0;
     //main work
     for (float T = T_start ; T >= T_last ; T -= T_interval ){
-        writefile << to_string(T);
+        // writefile << to_string(T);
         float p = 1.0 - exp(-2.0/T);
         for(int ___ = 0 ; ___ < 10 ; ___++){
             long double ss_mul = .0;
@@ -105,18 +105,18 @@ int main( int argc, char** argv ){
                     SpinMatrix[Cluster[i]] *= -1;//Update the spins' direction
                 }
                 
-                S_mul = 0;
-                for (int k = 0; k < N ; k ++){
-                    for (int l : {sqrtN*((k/sqrtN - 1) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
-                                  sqrtN*(k/sqrtN) + ((k % sqrtN - 1) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){
-                        S_mul += SpinMatrix[k]*SpinMatrix[l];
-                    }
-                }
+                // S_mul = 0;
+                // for (int k = 0; k < N ; k ++){
+                //     for (int l : {sqrtN*((k/sqrtN - 1) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
+                //                   sqrtN*(k/sqrtN) + ((k % sqrtN - 1) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){
+                //         S_mul += SpinMatrix[k]*SpinMatrix[l];
+                //     }
+                // }
 
-                ss_mul += fabs(S_mul / (4*N));
+                // ss_mul += fabs(S_mul / (4*N));
 
             }
-            writefile << "," + to_string(ss_mul / (apply_count/10));
+            // writefile << "," + to_string(ss_mul / (apply_count/10));
 
             //show Fractal shape
             if( T > 2.1 && T < 2.3 ){
@@ -130,10 +130,10 @@ int main( int argc, char** argv ){
             }
 
         }
-        writefile << endl;
+        // writefile << endl;
     }
     IsingFract_wrfile.close();
-    writefile.close();
+    // writefile.close();
 
     cout << "\n-------------------------------" << endl;
     cout << "End the excuction!!!" <<endl;
