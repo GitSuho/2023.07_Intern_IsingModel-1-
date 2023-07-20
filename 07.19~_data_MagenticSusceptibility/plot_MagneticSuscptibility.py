@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 file_ss = "Ising_MSLF_32x32_MCeff2000_intv0.300.txt"
-file_s = ""
+file_s = "Ising_32x32_MCeff2000_intv0.300<|m|>.txt"
 
 x_values1 = []
 _SS = []
@@ -24,11 +24,10 @@ if (len(x_values1) != len(x_values2)):
     print("ERROR:12083779dh892hbje")
     exit()
 
-beta = 1
 N_lattice = 32**2
 y_value = []
 for i in range(len(_SS)):
-    y_value.append(beta/N_lattice*(_SS[i] - _S[i]*_S[i]))
+    y_value.append(1/(x_values1[i]*N_lattice)*(_SS[i] - _S[i]*_S[i]))
 
 plt.xlabel("T")
 plt.ylabel('MagneticSuscptibility')

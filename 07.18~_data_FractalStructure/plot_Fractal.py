@@ -23,7 +23,7 @@ t.home()
 t.shape('classic')
 t.speed('fastest')
 
-filename = "IsingFract_wrfile_32x32_MCeff2000_intv0.300.txt"
+filename = "IsingFract_wrfile_64x64_MCeff1000_intv0.300.txt"
 
 with open(filename , 'r') as file_data:
     for line in file_data:
