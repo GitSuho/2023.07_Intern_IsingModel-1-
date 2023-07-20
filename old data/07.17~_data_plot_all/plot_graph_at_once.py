@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from scipy.optimize import curve_fit
 folder_path = os.getcwd()
 file_list = os.listdir(folder_path)
 

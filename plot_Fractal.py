@@ -28,6 +28,7 @@ filename = "IsingFract_wrfile_32x32_MCeff2000_intv0.300.txt"
 with open(filename , 'r') as file_data:
     for line in file_data:
         if (len(line.split(',')) < 2):
+            input("Next lattice")
             t.clear()
             t.home()
             print(line)

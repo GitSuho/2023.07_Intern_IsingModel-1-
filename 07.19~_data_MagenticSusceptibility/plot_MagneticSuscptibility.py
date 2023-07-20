@@ -31,6 +31,6 @@ for i in range(len(_SS)):
     y_value.append(beta/N_lattice*(_SS[i] - _S[i]*_S[i]))
 
 plt.xlabel("T")
-plt.ylabel('MagneticSuceptability')
+plt.ylabel('MagneticSuscptibility')
 plt.savefig(f'{file_ss[:-4]}.jpg', dpi=3000)
 plt.show()
