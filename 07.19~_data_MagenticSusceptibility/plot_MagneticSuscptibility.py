@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 file_ss = "Ising_MSLF_32x32_MCeff2000_intv0.300.txt"
-file_s = "Ising_32x32_MCeff2000_intv0.300<|m|>.txt"
+file_s = "Ising_32x32_MCeff2000_intv0.300_meanabs_m.txt"
 
 x_values1 = []
 _SS = []
@@ -29,6 +29,7 @@ y_value = []
 for i in range(len(_SS)):
     y_value.append(1/(x_values1[i]*N_lattice)*(_SS[i] - _S[i]*_S[i]))
 
+plt.plot(x_values1, y_value)
 plt.xlabel("T")
 plt.ylabel('MagneticSuscptibility')
 plt.savefig(f'{file_ss[:-4]}.jpg', dpi=3000)

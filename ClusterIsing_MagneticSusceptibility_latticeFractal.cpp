@@ -106,28 +106,27 @@ int main( int argc, char** argv ){
                 }
                 
                 S_mul = 0;
-                for (int k = 0; k < N ; k ++){
-                    for (int l : {sqrtN*((k/sqrtN - 1) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
-                                  sqrtN*(k/sqrtN) + ((k % sqrtN - 1) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){
+                for (int k = 0; k < N ; k++){
+                    for (int l = 0; l < N ; l++){
                         S_mul += SpinMatrix[k]*SpinMatrix[l];
                     }
                 }
 
-                ss_mul += fabs(S_mul / (4*N));
+                ss_mul += fabs(S_mul / (N*N));
 
             }
             writefile << "," + to_string(ss_mul / (apply_count/10));
 
-            //show Fractal shape
-            if( T > 2.1 && T < 2.3 ){
-                IsingFract_wrfile << to_string(T) << "(" << to_string(___) << ")" << endl;
-                for(int i = 0; i < sqrtN; i++){
-                    for(int j = 0; j < sqrtN; j++){
-                        IsingFract_wrfile << "," << SpinMatrix[i+j];
-                    }
-                    IsingFract_wrfile << endl;
-                }
-            }
+            // //show Fractal shape
+            // if( T > 2.1 && T < 2.3 ){
+            //     IsingFract_wrfile << to_string(T) << "(" << to_string(___) << ")" << endl;
+            //     for(int i = 0; i < sqrtN; i++){
+            //         for(int j = 0; j < sqrtN; j++){
+            //             IsingFract_wrfile << "," << SpinMatrix[i+j];
+            //         }
+            //         IsingFract_wrfile << endl;
+            //     }
+            // }
 
         }
         writefile << endl;
