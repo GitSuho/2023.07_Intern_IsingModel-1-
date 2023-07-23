@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-file_ss = "Ising_MSLF_32x32_MCeff2000_intv0.300.txt"
+file_ss = "Ising_MSLF_32x32_MCeff2000_intv0.300_new.txt"
 file_s = "Ising_32x32_MCeff2000_intv0.300_meanabs_m.txt"
 
 x_values1 = []
