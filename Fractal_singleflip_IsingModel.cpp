@@ -10,7 +10,7 @@ using namespace std;
 int main( int argc, char** argv ){
     //input factors
     long long int eff_mc_step = -1; 
-    float T_start = -1; float T_last = -1; float T_interval = -1; float T_critical_intv = -1;
+    float T_start = -1; float T_last = -1; float T_interval = -1; 
     int sqrtN = -1;
     string addition_name = "";
     for (int i = 1; i < argc; i++){
@@ -25,8 +25,6 @@ int main( int argc, char** argv ){
             T_last = stof(argv[i+1]);i += 1;}
         else if (arg == "-it") {
             T_interval = stof(argv[i+1]);i += 1;}
-        else if (arg == "-ctit") {
-            T_critical_intv = stof(argv[i+1]);i += 1;}
         else if (arg == "-ad"){
             addition_name = argv[i+1];i+=1;
         }
@@ -81,7 +79,7 @@ int main( int argc, char** argv ){
     }  
 
     //main work
-    for (float T = T_start ; T >= T_last ; (2<=T&&T<=2.5)?T-=T_critical_intv:T-=T_interval ){
+    for (float T = T_start ; T >= T_last ; T-=T_interval ){
         //apply to mean m
         // string line = to_string(T);
         for(int ___ = 0 ; ___ < 10 ; ___++){
