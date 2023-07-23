@@ -9,23 +9,12 @@
 #include <vector>
 using namespace std;
 
-//Random functions
-int RandIndex_Vec(int size_vec){
+//Random function
+int RandIndex_arr(int size_vec){
     static mt19937 engine1((unsigned int)time(NULL));
     static uniform_int_distribution<int> distribution1(0, size_vec-1);
     return distribution1(engine1);
 }
-int RandInt_0toN(int _N){
-    static mt19937 engine2((unsigned int)time(NULL));
-    static uniform_int_distribution<int> distribution2(0, _N-1);
-    return distribution2(engine2);
-}
-float RandFloat_0to1(){
-    static mt19937 engine3((unsigned int)time(NULL));
-    static uniform_real_distribution<float> distribution3(0, 1);
-    return distribution3(engine3);
-}
-
 
 int main( int argc, char** argv ){
 
@@ -58,68 +47,80 @@ int main( int argc, char** argv ){
     int SpinMatrix[N];
     fill_n(SpinMatrix, N, 1);
 
+    //Random generate
+    static mt19937 engine2((unsigned int)time(NULL));
+    static uniform_int_distribution<int> distribution2(0, N-1);
+    static mt19937 engine3((unsigned int)time(NULL));
+    static uniform_real_distribution<float> distribution3(0, 1);
+
     //write file generate
     string filename = "Ising_"+to_string(sqrtN)+"x"+to_string(sqrtN)+"_MCeff"+to_string(eff_mc_step)+"_intv"+to_string(T_interval).substr(0, 5)+"<|m|>"+addition_name+".txt"; 
     ofstream writefile(filename);
 
     //junk MC
     for (int _____ = 0 ; _____ < junk_count ; _____ ++ ){
-        int position = RandInt_0toN(N);
+        int position = distribution2(engine2);
         int J = 1;
         float value = exp(-2*J*SpinMatrix[position]
                     *(SpinMatrix[(position/sqrtN)*sqrtN + (position%sqrtN+1)%sqrtN] + SpinMatrix[(position/sqrtN)*sqrtN + (position%sqrtN-1+sqrtN)%sqrtN] 
                     + SpinMatrix[position%sqrtN + ((position/sqrtN+1)%sqrtN)*sqrtN] + SpinMatrix[position%sqrtN + ((position/sqrtN-1+sqrtN)%sqrtN)*sqrtN])
                     /T_start);
-        if ( RandFloat_0to1() < value){
+        if ( distribution3(engine3) < value){
             SpinMatrix[position] = -1*SpinMatrix[position];
         }
     }
 
-    //Sum of Spins
+    //Sum of the initial Spins
     float S_sum = 0;
     for (int i = 0; i < N ; i ++){
         S_sum += SpinMatrix[i];
     }
 
     //main work
+    int Pocket[N]; int Cluster[N];
+    int Pocket_size; int Cluster_size; 
+    int j; int k;
     for (float T = T_start ; T >= T_last ; T -= T_interval ){
-        writefile << to_string(T);
+        string write_line = to_string(T);
         float p = 1.0 - exp(-2.0/T);
         for(int ___ = 0 ; ___ < 10 ; ___++){
             long double m_sum = .0;
             for (long long int _ = 0 ; _ < apply_count / 10 ; _++){
-                int j = RandInt_0toN(N);
-                vector<int> Pocket = {j}; vector<int> Cluster = {j};
+                j = distribution2(engine2);
+                fill_n(Pocket, N, 1); fill_n(Cluster, N, 1);
+                Pocket[j] = -1 ; Cluster[j] = -1;
+                Pocket_size = 1; Cluster_size = 1;
 
-                while (!Pocket.empty()){
-                    int k = Pocket[RandIndex_Vec(Pocket.size())];//Choice random element of the Pocket
+                while (Pocket_size > 0){
+                    //Choice random element of the Pocket
+                    int foo = RandIndex_arr(Pocket_size);
+                    int var = 0;
+                    for (int i = 0 ; i < N ; i++){
+                        var += -(Pocket[i] - 1)/2;
+                        if(var == foo){
+                            k = i;
+                            break;
+                        }
+                    }
                     for (int l : {sqrtN*((k/sqrtN - 1) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
                                   sqrtN*(k/sqrtN) + ((k % sqrtN - 1) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){ //l is one of close index of k position of SpinMatrix
                         //Add the element l at Pocket and Cluster when the below conditions are satisfied
-                        if ((SpinMatrix[l] == SpinMatrix[k])&&(find(Cluster.begin(), Cluster.end(), l) == Cluster.end())&&(RandFloat_0to1() < p)){
-                            Pocket.push_back(l); 
-                            Cluster.push_back(l);
+                        if ((SpinMatrix[l] == SpinMatrix[k])&&(Cluster[l] == 1)&&(distribution3(engine3) < p)){
+                            Pocket[l] = -1; Pocket_size += 1;
+                            Cluster[l] = -1; Cluster_size += 1;
                         }
                     }
-                    Pocket.erase(remove(Pocket.begin(), Pocket.end(), k), Pocket.end());//Eliminate the k element of the Pocket
+                    Pocket[k] = 1; Pocket_size -= 1;//Eliminate the k element of the Pocket
                 }
-                int sign = SpinMatrix[Cluster[0]];
-                for (int i = 0 ; i < Cluster.size() ; i ++){
-                    SpinMatrix[Cluster[i]] *= -1;//Update the spins' direction
+                for (int i = 0; i < N; i++){
+                    SpinMatrix[i] *= Cluster[i];//Update the spins' direction
                 }
-                
-                S_sum = 0;
-                for (int i = 0; i < N ; i ++){
-                    S_sum += SpinMatrix[i];
-                }
-                // S_sum += -2*sign*Cluster.size();//Update the sum of spins
+                S_sum += 2.0*SpinMatrix[k]*Cluster_size;//Update the sum of spins
                 m_sum += fabs(S_sum / N);//Add the m value
             }
-
-
-            writefile << "," + to_string(m_sum / (apply_count/10));//Wirte the <m>
+            write_line += "," + to_string(m_sum / (apply_count/10));//Wirte the <m>
         }
-        writefile << endl;
+        writefile << write_line << endl;
     }
     writefile.close();
 
