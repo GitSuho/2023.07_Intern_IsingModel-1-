@@ -83,7 +83,7 @@ int main( int argc, char** argv ){
         //apply to mean m
         // string line = to_string(T);
         for(int ___ = 0 ; ___ < 10 ; ___++){
-            long double m_sum = .0;
+            // long double m_sum = .0;
             for (long long int _ = 0 ; _ < apply_count / 10 ; _++){
                 //random position
                 float prob = generator2();
@@ -101,11 +101,12 @@ int main( int argc, char** argv ){
                 }
                 // //calculate m sum
                 // m_sum += S_sum/N;
+// cout << _ << endl;
             }
             // line += "," + to_string(m_sum / (apply_count/10));
 
             //save fractal spin lattices
-            if(T== 2.27){
+            if(T  < 2.3 && T > 2.2){
                 writefile_fractal<< to_string(T) << "(" << to_string(___) << ")" << endl;
                 string line2 = "";
                 for (int i = 0 ; i < sqrtN ; i ++){
@@ -115,7 +116,6 @@ int main( int argc, char** argv ){
                     line2 += "\n";
                 }
                 writefile_fractal << line2 << endl;
-                line2 = "";
             }
         }
         // //write at writefile
