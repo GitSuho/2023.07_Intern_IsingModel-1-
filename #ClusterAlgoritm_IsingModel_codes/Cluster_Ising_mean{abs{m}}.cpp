@@ -9,12 +9,12 @@
 #include <vector>
 using namespace std;
 
-//Random function
-int RandIndex_arr(int size_vec){
-    static mt19937 engine1((unsigned int)time(NULL));
-    static uniform_int_distribution<int> distribution1(0, size_vec-1);
-    return distribution1(engine1);
-}
+// //Random function
+// int RandIndex_arr(int size_vec){
+//     static mt19937 engine1((unsigned int)time(NULL));
+//     static uniform_int_distribution<int> distribution1(0, size_vec-1);
+//     return distribution1(engine1);
+// }
 
 int main( int argc, char** argv ){
 
@@ -93,15 +93,9 @@ int main( int argc, char** argv ){
 
                 while (Pocket_size > 0){
                     //Choice random element of the Pocket
-                    int foo = RandIndex_arr(Pocket_size);
-                    int var = 0;
-                    for (int i = 0 ; i < N ; i++){
-                        var += -(Pocket[i] - 1)/2;
-                        if(var == foo){
-                            k = i;
-                            break;
-                        }
-                    }
+
+                    k = distribution3(engine3) * Pocket_size ; // choose random position k.
+                    
                     for (int l : {sqrtN*((k/sqrtN - 1) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
                                   sqrtN*(k/sqrtN) + ((k % sqrtN - 1) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){ //l is one of close index of k position of SpinMatrix
                         //Add the element l at Pocket and Cluster when the below conditions are satisfied
