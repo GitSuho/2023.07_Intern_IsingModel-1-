@@ -100,8 +100,8 @@ int main( int argc, char** argv ){
 
                 while (!Pocket.empty()){
                     k = Pocket[RandIndex_Vec(Pocket.size())];//Choice random element of the Pocket
-                    for (int l : {sqrtN*((k/sqrtN - 1) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
-                                  sqrtN*(k/sqrtN) + ((k % sqrtN - 1) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){ //l is one of close index of k position of SpinMatrix
+                    for (int l : {sqrtN*((k/sqrtN - 1 + sqrtN) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
+                                  sqrtN*(k/sqrtN) + ((k % sqrtN - 1 + sqrtN) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)}  ){ //l is one of close index of k position of SpinMatrix
                         //Add the element l at Pocket and Cluster when the below conditions are satisfied
                         if ((SpinMatrix[l] == SpinMatrix[k])&&(find(Cluster.begin(), Cluster.end(), l) == Cluster.end())&&(RandFloat_0to1() < p)){
                             Pocket.push_back(l); 
@@ -110,14 +110,19 @@ int main( int argc, char** argv ){
                     }
                     Pocket.erase(remove(Pocket.begin(), Pocket.end(), k), Pocket.end());//Eliminate the k element of the Pocket
                 }
-                int sign = SpinMatrix[Cluster[0]];
+
                 for (int i = 0 ; i < Cluster.size() ; i ++){
                     SpinMatrix[Cluster[i]] *= -1;//Update the spins' direction
                 }
-                S_sum += 2.0*SpinMatrix[j]*Cluster.size();//Update the sum of spins
+                // S_sum += 2.0*SpinMatrix[Cluster[0]]*Cluster.size();//Update the sum of spins
+
+S_sum = 0;
+for (int i = 0; i < N ; i ++){
+    S_sum += SpinMatrix[i];
+}
                 m_sum += fabs(S_sum / N);//Add the m value
             }
-            write_line += "," + to_string(m_sum / (apply_count/10));//Wirte the <m>
+            write_line += "," + to_string(m_sum / (apply_count / 10));//Wirte the <m>
         }
         writefile << write_line << endl;
     }

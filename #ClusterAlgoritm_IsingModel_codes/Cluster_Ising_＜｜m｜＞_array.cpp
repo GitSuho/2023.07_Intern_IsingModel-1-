@@ -82,7 +82,7 @@ int main( int argc, char** argv ){
     //main work
     int Pocket[N]; int Cluster[N];
     int Pocket_size; int Cluster_size; 
-    int j; int k;
+    int j;
     for (float T = T_start ; T >= T_last ; T -= T_interval ){
         string write_line = to_string(T);
         float p = 1.0 - exp(-2.0/T);
@@ -97,10 +97,9 @@ int main( int argc, char** argv ){
                 while (Pocket_size > 0){
                     //Choice random element of the Pocket
 
-                    k = distribution3(engine3) * Pocket_size ; // choose random position k.
-                    
-                    for (int l : {sqrtN*((k/sqrtN - 1) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
-                                  sqrtN*(k/sqrtN) + ((k % sqrtN - 1) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){ //l is one of close index of k position of SpinMatrix
+                    int k = distribution3(engine3) * Pocket_size ; // choose random position k.
+                    for (int l : {sqrtN*((k/sqrtN - 1 + sqrtN) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
+                                  sqrtN*(k/sqrtN) + ((k % sqrtN - 1 + sqrtN) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){ //l is one of close index of k position of SpinMatrix
                         //Add the element l at Pocket and Cluster when the below conditions are satisfied
                         if ((SpinMatrix[l] == SpinMatrix[k])&&(Cluster[l] == 1)&&(distribution3(engine3) < p)){
                             Pocket[l] = -1; Pocket_size += 1;
@@ -112,7 +111,19 @@ int main( int argc, char** argv ){
                 for (int i = 0; i < N; i++){
                     SpinMatrix[i] *= Cluster[i];//Update the spins' direction
                 }
-                S_sum += 2.0*SpinMatrix[j]*Cluster_size;//Update the sum of spins
+                // S_sum += 2.0*SpinMatrix[j]*Cluster_size;//Update the sum of spins
+S_sum = 0;
+for (int i = 0; i < N ; i ++){
+    S_sum += SpinMatrix[i];
+}
+
+// if (T < 1.8){
+// cout << T << endl;
+// for (int i = 0 ; i < sqrtN ; i++){for (int j = 0; j < sqrtN ; j++){
+//     cout << SpinMatrix[i+j]<<" ";
+// }cout << endl;}}
+
+
                 m_sum += fabs(S_sum / N);//Add the m value
             }
             write_line += "," + to_string(m_sum / (apply_count/10));//Wirte the <m>

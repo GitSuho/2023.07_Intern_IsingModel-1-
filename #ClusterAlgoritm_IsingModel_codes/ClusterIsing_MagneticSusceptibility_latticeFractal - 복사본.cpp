@@ -93,8 +93,8 @@ int main( int argc, char** argv ){
 
                 while (!Pocket.empty()){
                     int k = Pocket[RandIndex_Vec(Pocket.size())];//Choice random element of the Pocket
-                    for (int l : {sqrtN*((k/sqrtN - 1) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
-                                  sqrtN*(k/sqrtN) + ((k % sqrtN - 1) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){ //l is one of close index of k position of SpinMatrix
+                    for (int l : {sqrtN*((k/sqrtN - 1 + sqrtN) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
+                                  sqrtN*(k/sqrtN) + ((k % sqrtN - 1 + sqrtN) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)}  ){ //l is one of close index of k position of SpinMatrix
                         //Add the element l at Pocket and Cluster when the below conditions are satisfied
                         if ((SpinMatrix[l] == SpinMatrix[k])&&(find(Cluster.begin(), Cluster.end(), l) == Cluster.end())&&(RandFloat_0to1() < p)){
                             Pocket.push_back(l); 
