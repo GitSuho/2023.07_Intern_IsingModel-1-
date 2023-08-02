@@ -17,6 +17,8 @@ using namespace std;
 // }
 
 int main( int argc, char** argv ){
+    clock_t start, end;
+    start = clock();
 
     //input factors
     long long int eff_mc_step = -1; 
@@ -48,13 +50,14 @@ int main( int argc, char** argv ){
     fill_n(SpinMatrix, N, 1);
 
     //Random generate
-    static mt19937 engine2((unsigned int)time(NULL));
+    random_device rd;
+    static mt19937 engine2(rd());
     static uniform_int_distribution<int> distribution2(0, N-1);
-    static mt19937 engine3((unsigned int)time(NULL));
+    static mt19937 engine3(rd());
     static uniform_real_distribution<float> distribution3(0, 1);
 
     //write file generate
-    string filename = "Ising_"+to_string(sqrtN)+"x"+to_string(sqrtN)+"_MCeff"+to_string(eff_mc_step)+"_intv"+to_string(T_interval).substr(0, 5)+"<|m|>"+addition_name+".txt"; 
+    string filename = "Ising_"+to_string(sqrtN)+"x"+to_string(sqrtN)+"_MCeff"+to_string(eff_mc_step)+"_intv"+to_string(T_interval).substr(0, 5)+"mean(abs(m))_arr"+addition_name+".txt"; 
     ofstream writefile(filename);
 
     //junk MC
@@ -109,13 +112,16 @@ int main( int argc, char** argv ){
                 for (int i = 0; i < N; i++){
                     SpinMatrix[i] *= Cluster[i];//Update the spins' direction
                 }
-                S_sum += 2.0*SpinMatrix[k]*Cluster_size;//Update the sum of spins
+                S_sum += 2.0*SpinMatrix[j]*Cluster_size;//Update the sum of spins
                 m_sum += fabs(S_sum / N);//Add the m value
             }
             write_line += "," + to_string(m_sum / (apply_count/10));//Wirte the <m>
         }
         writefile << write_line << endl;
     }
+    end = clock();
+    writefile << "#" << to_string(end - start) << endl;
+
     writefile.close();
 
     cout << "\n-------------------------------" << endl;
