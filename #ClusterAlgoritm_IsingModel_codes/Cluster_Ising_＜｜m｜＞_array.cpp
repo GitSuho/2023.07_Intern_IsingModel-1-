@@ -98,9 +98,15 @@ int main( int argc, char** argv ){
                         }
                     }
                     int k = ind;
+// if(T < 2.3 && T >2.2 && k/sqrtN == 0){
 
+// cout <<"k : " <<k << endl;}
                     for (int l : {sqrtN*((k/sqrtN - 1 + sqrtN) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
                                   sqrtN*(k/sqrtN) + ((k % sqrtN - 1 + sqrtN) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){ //l is one of close index of k position of SpinMatrix
+
+// if(T < 2.3 && T >2.2 && k/sqrtN == 0){
+// cout << "l : "<< l << endl;}
+
                         //Add the element l at Pocket and Cluster when the below conditions are satisfied
                         if ((SpinMatrix[l] == SpinMatrix[k])&&(Cluster[l] == 1)&&(distribution3(engine3) < p)){
                             Pocket[l] = -1; Pocket_size += 1;
@@ -121,6 +127,19 @@ for (int i = 0; i < N ; i ++){
                 m_sum += fabs(S_sum / N);//Add the m value
             }
             write_line += "," + to_string(m_sum / (apply_count/10));//Wirte the <m>
+
+if(T < 2.3 && T >2.2 ){
+cout << T << endl;
+for (int i = 0; i < sqrtN ; i++){
+    for (int j = 0; j < sqrtN ; j++){
+        cout << SpinMatrix[sqrtN*i+j] << ", " ;
+
+}cout << endl;}
+
+}
+
+
+
         }
         writefile << write_line << endl;
     }
