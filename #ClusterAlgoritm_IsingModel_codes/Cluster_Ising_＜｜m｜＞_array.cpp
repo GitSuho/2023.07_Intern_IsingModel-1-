@@ -10,8 +10,8 @@
 using namespace std;
 
 int main( int argc, char** argv ){
-    clock_t start, end;
-    start = clock();
+    // clock_t start, end;
+    // start = clock();
 
     //input factors
     long long int eff_mc_step = -1; 
@@ -98,14 +98,10 @@ int main( int argc, char** argv ){
                         }
                     }
                     int k = ind;
-// if(T < 2.3 && T >2.2 && k/sqrtN == 0){
-
-// cout <<"k : " <<k << endl;}
                     for (int l : {sqrtN*((k/sqrtN - 1 + sqrtN) % sqrtN) + (k % sqrtN), sqrtN*((k/sqrtN + 1) % sqrtN) + (k % sqrtN), 
                                   sqrtN*(k/sqrtN) + ((k % sqrtN - 1 + sqrtN) % sqrtN), sqrtN*(k/sqrtN) + ((k % sqrtN + 1) % sqrtN)} ){ //l is one of close index of k position of SpinMatrix
 
-// if(T < 2.3 && T >2.2 && k/sqrtN == 0){
-// cout << "l : "<< l << endl;}
+
 
                         //Add the element l at Pocket and Cluster when the below conditions are satisfied
                         if ((SpinMatrix[l] == SpinMatrix[k])&&(Cluster[l] == 1)&&(distribution3(engine3) < p)){
@@ -119,32 +115,19 @@ int main( int argc, char** argv ){
                     SpinMatrix[i] *= Cluster[i];//Update the spins' direction
                 }
                 // S_sum += 2.0*SpinMatrix[j]*Cluster_size;//Update the sum of spins
-S_sum = 0;
-for (int i = 0; i < N ; i ++){
-    S_sum += SpinMatrix[i];
-}
+                S_sum = 0;
+                for (int i = 0; i < N ; i ++){
+                    S_sum += SpinMatrix[i];
+                }
 
                 m_sum += fabs(S_sum / N);//Add the m value
             }
             write_line += "," + to_string(m_sum / (apply_count/10));//Wirte the <m>
-
-if(T < 2.3 && T >2.2 ){
-cout << T << endl;
-for (int i = 0; i < sqrtN ; i++){
-    for (int j = 0; j < sqrtN ; j++){
-        cout << SpinMatrix[sqrtN*i+j] << ", " ;
-
-}cout << endl;}
-
-}
-
-
-
         }
         writefile << write_line << endl;
     }
-    end = clock();
-    writefile << "#" << to_string(end - start) << endl;
+    // end = clock();
+    // writefile << "#" << to_string(end - start) << endl;
 
     writefile.close();
 

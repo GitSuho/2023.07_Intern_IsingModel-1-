@@ -31,8 +31,8 @@ float RandFloat_0to1(){
 
 
 int main( int argc, char** argv ){
-    clock_t start, end;
-    start = clock();
+    // clock_t start, end;
+    // start = clock();
 
     //input factors
     long long int eff_mc_step = -1; 
@@ -126,8 +126,8 @@ for (int i = 0; i < N ; i ++){
         }
         writefile << write_line << endl;
     }
-    end = clock();
-    writefile << "#" << to_string(end - start) << endl;
+    // end = clock();
+    // writefile << "#" << to_string(end - start) << endl;
 
     writefile.close();
 
