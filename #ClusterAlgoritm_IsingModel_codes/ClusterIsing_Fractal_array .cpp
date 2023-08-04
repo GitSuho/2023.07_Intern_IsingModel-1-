@@ -114,19 +114,19 @@ int main( int argc, char** argv ){
                 }
 
             }
-                //save fractal spin lattices
-                if(T  < 2.3 && T > 2.2){
-                    writefile_fractal<< to_string(T) << "(" << to_string(___) << ")" << endl;
-                    string line2 = "";
-                    for (int i = 0 ; i < sqrtN ; i ++){
-                        for(int j = 0 ; j < sqrtN ; j++){
-                            line2 += "," + to_string(SpinMatrix[i+j]);
+                    //save fractal spin lattices
+                    if(T  < 2.3 && T > 2.2){
+                        writefile_fractal<< to_string(T) << "(" << to_string(___) << ")" << endl;
+                        string line2 = "";
+                        for (int i = 0 ; i < sqrtN ; i ++){
+                            for(int j = 0 ; j < sqrtN ; j++){
+                                line2 += "," + to_string(SpinMatrix[sqrtN*i+j]);
+                            }
+                            line2 += "\n";
                         }
-                        line2 += "\n";
-                    }
-                    writefile_fractal << line2 << endl;
+                        writefile_fractal << line2 << endl;
+                    
                 }
-            }
         }
     }
 
