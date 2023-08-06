@@ -47,10 +47,9 @@ int main( int argc, char** argv ){
         fill_n(SpinMatrix, N, 1);
 
         //J values
-        int J[N][N];
+        int J[N][N] = {0};
         for (int i = 0 ; i < N ; i++){
-            J[i][i] = 0;
-            for (int j = i+1 ; j < N ; j++){
+            for (int j : {(i/sqrtN)*sqrtN + (i%sqrtN+1)%sqrtN , i%sqrtN + ((i/sqrtN+1)%sqrtN)*sqrtN}){//right and down position.
                 if(distribution2(engine2) < p_factor){
                     J[i][j] = 1;J[j][i] = 1;
                 }else{
@@ -58,19 +57,9 @@ int main( int argc, char** argv ){
                 }}
         }
 
-// cout << "p : " << p_factor << endl;
-// for (int i = 0 ; i < N ; i++){
-//     for (int j = 0 ; j < N ; j++){
-//         cout << J[i][j] << " ";
-//     }
-//     cout << endl;
-// }
-// cout << "-----------------------------------------------------------------" << endl;
-
-
         //write file generate
         string filename = "DisorderedIsing_" +  to_string(sqrtN) + "x" + to_string(sqrtN) + "_effmc" + to_string(eff_mc_step) 
-        +"_intv" +to_string(T_interval).substr(0, 5) + "_p" + to_string(p_factor).substr(0.4) + addition_name + ".txt"; 
+        +"_intv" +to_string(T_interval).substr(0, 5) + "_p" + to_string(p_factor).substr(0, 4) + addition_name + ".txt"; 
         ofstream writefile(filename);
 
         //junk walk
@@ -81,14 +70,14 @@ int main( int argc, char** argv ){
             int position = prob ;
 
             //calculation
-            float Hemi = 0.0;
+            float DeltaHemilt = 0.0;
             for (int near_position : {(position/sqrtN)*sqrtN + (position%sqrtN+1)%sqrtN, (position/sqrtN)*sqrtN + (position%sqrtN-1+sqrtN)%sqrtN,
                                     position%sqrtN + ((position/sqrtN+1)%sqrtN)*sqrtN, position%sqrtN + ((position/sqrtN-1+sqrtN)%sqrtN)*sqrtN} ){
-                Hemi += J[position][near_position]*SpinMatrix[position]*SpinMatrix[near_position];
+                DeltaHemilt += -2*J[position][near_position]*SpinMatrix[position]*SpinMatrix[near_position];
             }
 
             //change state by condition
-            if ( (prob-position) < exp(-2*Hemi/T)){//pick random float which between 0 and 1. And compare
+            if ( (prob-position) < exp(DeltaHemilt/T)){//pick random float which between 0 and 1. And compare
                 SpinMatrix[position] = -1*SpinMatrix[position];
             }
         }
@@ -111,19 +100,19 @@ int main( int argc, char** argv ){
                     int position = prob ;
 
                     //calculation
-                    float Hemi = 0.0;
+                    float DeltaHemilt = 0.0;
                     for (int near_position : {(position/sqrtN)*sqrtN + (position%sqrtN+1)%sqrtN, (position/sqrtN)*sqrtN + (position%sqrtN-1+sqrtN)%sqrtN,
                                             position%sqrtN + ((position/sqrtN+1)%sqrtN)*sqrtN, position%sqrtN + ((position/sqrtN-1+sqrtN)%sqrtN)*sqrtN} ){
-                        Hemi += J[position][near_position]*SpinMatrix[position]*SpinMatrix[near_position];
+                        DeltaHemilt += -2*J[position][near_position]*SpinMatrix[position]*SpinMatrix[near_position];
                     }
 
                     //change state by condition
-                    if ((prob-position) < exp(-2*Hemi/T)){//pick random float which between 0 and 1. And compare
+                    if ((prob-position) < exp(DeltaHemilt/T)){//pick random float which between 0 and 1. And compare
                         SpinMatrix[position] = -1*SpinMatrix[position];
                         S_sum += 2*SpinMatrix[position];
                     }
                     //calculate m sum
-                    m_sum += S_sum/N;
+                    m_sum += fabs(S_sum/N);
                 }
                 line += "," + to_string(m_sum / (apply_count/10));
             }
