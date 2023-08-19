@@ -41,7 +41,7 @@ int main( int argc, char** argv ){
     uniform_real_distribution<float> distribution2(0, 1);
 
 
-    for(float p_factor : {0.0, 0.2 , 0.4 , 0.6 , 0.8 , 1.0}){
+    for(float p_factor : {0.0, 0.3 , 0.6 , 0.8 , 0.85, 0.9, 0.95, 1.0}){
         //matrix generate
         int SpinMatrix[N];
         fill_n(SpinMatrix, N, 1);
